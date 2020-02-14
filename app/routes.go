@@ -5,7 +5,7 @@ import (
 	"github.com/raul01us/bookstore_users-api/controllers/users"
 )
 
-func mapUrls() {
+func mapURLs() {
 	router.GET("/ping", ping.Ping)
 
 	router.POST("/users", users.CreateUser)

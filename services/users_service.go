@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/raul01us/bookstore_users-api/domains/users"
+	"github.com/raul01us/bookstore_users-api/utils/crypto_utils"
 	"github.com/raul01us/bookstore_users-api/utils/date_utils"
 	"github.com/raul01us/bookstore_users-api/utils/errors"
 )
@@ -15,6 +16,7 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	// Add the default values
 	user.DateCreated = date_utils.GetNowDBFormat()
 	user.Status = users.StatusActive
+	user.Password = crypto_utils.GetMd5(user.Password)
 	// Attempt to save the user in the database
 	if err := user.Save(); err != nil {
 		return nil, err
@@ -70,7 +72,7 @@ func DeleteUser(userID int64) *errors.RestErr {
 	return user.Delete()
 }
 
-func Search(status string) ([]users.User, *errors.RestErr) {
+func Search(status string) (users.Users, *errors.RestErr) {
 	dao := &users.User{}
 	return dao.FindByStatus(status)
 }
